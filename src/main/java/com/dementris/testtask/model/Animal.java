@@ -1,17 +1,23 @@
 package com.dementris.testtask.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class Animals {
+import java.util.UUID;
 
-    private String id;
+@Data
+public class Animal {
+    private String id = String.valueOf(UUID.randomUUID());
     private String name;
-    private String 
+    private String type;
+    private String sex;
+    private Integer weight;
+    private Integer cost;
+    private Integer category;
 
-
+    public void setCategory() {
+        this.category = cost <= 20 ? 1 :
+                        cost <= 40 ? 2 :
+                        cost <= 60 ? 3 : 4;
+    }
 }
