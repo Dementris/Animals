@@ -3,6 +3,7 @@ package com.dementris.testtask.service;
 import com.dementris.testtask.model.Animal;
 import com.dementris.testtask.model.AnimalRepository;
 import com.dementris.testtask.model.AnimalsOrchestrator;
+import com.dementris.testtask.service.dto.AnimalsParamsDto;
 import com.dementris.testtask.service.parser.AnimalParser;
 import com.dementris.testtask.service.parser.AnimalParserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,9 @@ public class AnimalService implements AnimalsOrchestrator {
 
 
     @Override
-    public List<Animal> getAll() {
-        return animalRepository.getAll();
+    public List<Animal> getAll(AnimalsParamsDto params) {
+
+        return animalRepository.getAll(params.type(), params.category(), params.sex(), params.orderBy());
     }
 
     @Override
