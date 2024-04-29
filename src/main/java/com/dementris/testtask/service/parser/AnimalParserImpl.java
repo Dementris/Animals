@@ -14,6 +14,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -40,25 +41,13 @@ public class AnimalParserImpl implements AnimalParser {
         CsvMapper csvMapper = new CsvMapper();
         CsvSchema schema = csvMapper.schemaFor(CsvAnimalDto.class).withHeader();
         MappingIterator<CsvAnimalDto> it = csvMapper.readerFor(CsvAnimalDto.class).with(schema).readValues(data.getContentAsByteArray());
-
-//        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//        List<CsvAnimalDto> animals = new ArrayList<>();
-//        while (it.hasNext()){
-//            CsvAnimalDto animal = it.next();
-//            Set<ConstraintViolation<CsvAnimalDto>> violations = validator.validate(animal);
-//            if (!violations.isEmpty()) {
-//                continue;
-//            }
-//            animals.add(animal);
-//        }
         return validator.validate(it).stream().map(mapper::DtoToAnimal).toList();
     }
 
     @Override
     public List<Animal> parseXml(Resource data) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
-        byte[] contentAsByteArray = data.getContentAsByteArray();
-        XmlAnimalsDto entities = xmlMapper.readValue(contentAsByteArray, XmlAnimalsDto.class);
+        XmlAnimalsDto entities = xmlMapper.readValue(data.getContentAsByteArray(), XmlAnimalsDto.class);
         Iterator<XmlAnimalDto> it = entities.animal().stream().iterator();
         return validator.validate(it).stream().map(mapper::DtoToAnimal).toList();
     }

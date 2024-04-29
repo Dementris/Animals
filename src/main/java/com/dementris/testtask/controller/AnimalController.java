@@ -4,6 +4,7 @@ import com.dementris.testtask.model.Animal;
 import com.dementris.testtask.model.AnimalsOrchestrator;
 import com.dementris.testtask.service.Mapper;
 import com.dementris.testtask.service.dto.AnimalDto;
+import com.dementris.testtask.service.dto.AnimalsParamsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,18 @@ public class AnimalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AnimalDto>> getAll(){
-        List<Animal> entities = animalsOrchestrator.getAll();
+    public ResponseEntity<List<AnimalDto>> getAll(
+            @RequestParam String type,
+            @RequestParam Integer category,
+            @RequestParam String sex,
+            @RequestParam String orderBy
+            ){
+        AnimalsParamsDto paramsDto = new AnimalsParamsDto(
+                type,
+                category,
+                sex,
+                orderBy);
+        List<Animal> entities = animalsOrchestrator.getAll(paramsDto);
         return ResponseEntity.ok(entities.stream().map(mapper::animalToDto).toList());
     }
 

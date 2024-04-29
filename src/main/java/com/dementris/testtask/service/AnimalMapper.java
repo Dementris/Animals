@@ -5,13 +5,13 @@ import com.dementris.testtask.repository.AnimalDao;
 import com.dementris.testtask.service.dto.AnimalDto;
 import com.dementris.testtask.service.dto.CsvAnimalDto;
 import com.dementris.testtask.service.dto.XmlAnimalDto;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class AnimalMapper implements Mapper {
     @Override
     public AnimalDto animalToDto(Animal animal) {
-        if (animal == null) return null;
         return new AnimalDto(
                 animal.getId(),
                 animal.getName(),
