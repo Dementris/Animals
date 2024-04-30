@@ -69,9 +69,9 @@ public class AnimalServiceTests {
         List<Animal> mockedAnimals = new ArrayList<>();
         mockedAnimals.add(animal);
         mockedAnimals.add(animal1);
-        Mockito.when(repository.getAll(params.type(), params.category(), params.sex(), "cost")).thenReturn(mockedAnimals);
+        Mockito.when(repository.get(params.type(), params.category(), params.sex(), "cost")).thenReturn(mockedAnimals);
         // Act
-        List<Animal> result = service.getAll(params);
+        List<Animal> result = service.get(params);
         // Assert
         MatcherAssert.assertThat(result, hasSize(2));
         MatcherAssert.assertThat(result, contains(animal, animal1));
@@ -107,9 +107,9 @@ public class AnimalServiceTests {
         List<Animal> mockedAnimals = new ArrayList<>();
         mockedAnimals.add(animal);
         mockedAnimals.add(animal1);
-        Mockito.when(repository.getAll(params.type(), params.category(), params.sex(), "cost")).thenReturn(mockedAnimals);
+        Mockito.when(repository.get(params.type(), params.category(), params.sex(), "cost")).thenReturn(mockedAnimals);
         // Act
-        Executable executable = () -> service.getAll(new AnimalsParamsDto("NotExists", 255, "NotExists", "NotExists"));
+        Executable executable = () -> service.get(new AnimalsParamsDto("NotExists", 255, "NotExists", "NotExists"));
         // Assert
         Assertions.assertThrows(AnimalNotFoundException.class,
                 executable);
@@ -125,7 +125,7 @@ public class AnimalServiceTests {
         mocked.when(ObjectId::get).thenReturn(id);
 
         Animal mockedAnimal = new Animal();
-        mockedAnimal.setId(id);
+        mockedAnimal.setId(String.valueOf(id));
         mockedAnimal.setName("Test");
         mockedAnimal.setType("test");
         mockedAnimal.setSex("test");
@@ -140,9 +140,9 @@ public class AnimalServiceTests {
         Mockito.when(mockedFile.getContentType()).thenReturn("text/csv");
         Mockito.when(mockedFile.getResource()).thenReturn(new ByteArrayResource("Name,Type,Sex,Weight,Cost\nTest,test,test,0,0".getBytes()));
 
-        Mockito.when(repository.createFromFile(mockedAnimals)).thenReturn(mockedAnimals);
+        Mockito.when(repository.post(mockedAnimals)).thenReturn(mockedAnimals);
         //Act
-        List<Animal> result = service.createFromFile(mockedFile);
+        List<Animal> result = service.post(mockedFile);
         mocked.close();
         //Assert
         MatcherAssert.assertThat(result, hasSize(1));
@@ -165,7 +165,7 @@ public class AnimalServiceTests {
         mocked.when(ObjectId::get).thenReturn(id);
 
         Animal mockedAnimal = new Animal();
-        mockedAnimal.setId(id);
+        mockedAnimal.setId(String.valueOf(id));
         mockedAnimal.setName("Test");
         mockedAnimal.setType("test");
         mockedAnimal.setSex("test");
@@ -180,9 +180,9 @@ public class AnimalServiceTests {
         Mockito.when(mockedFile.getContentType()).thenReturn("text/csv");
         Mockito.when(mockedFile.getResource()).thenReturn(new ByteArrayResource("Name,Type,Sex,Weight,Cost\nTest,test,test,test,test".getBytes()));
 
-        Mockito.when(repository.createFromFile(mockedAnimals)).thenReturn(mockedAnimals);
+        Mockito.when(repository.post(mockedAnimals)).thenReturn(mockedAnimals);
         //Act
-        Executable executable = () -> service.createFromFile(mockedFile);
+        Executable executable = () -> service.post(mockedFile);
         mocked.close();
         //Assert
         Assertions.assertThrows(IncorrectFileDataException.class,
@@ -201,7 +201,7 @@ public class AnimalServiceTests {
         mocked.when(ObjectId::get).thenReturn(id);
 
         Animal mockedAnimal = new Animal();
-        mockedAnimal.setId(id);
+        mockedAnimal.setId(String.valueOf(id));
         mockedAnimal.setName("Test");
         mockedAnimal.setType("test");
         mockedAnimal.setSex("test");
@@ -225,9 +225,9 @@ public class AnimalServiceTests {
                         "\t</animal>\n" +
                         "</animals>").getBytes()));
 
-        Mockito.when(repository.createFromFile(mockedAnimals)).thenReturn(mockedAnimals);
+        Mockito.when(repository.post(mockedAnimals)).thenReturn(mockedAnimals);
         //Act
-        List<Animal> result = service.createFromFile(mockedFile);
+        List<Animal> result = service.post(mockedFile);
         mocked.close();
         //Assert
         MatcherAssert.assertThat(result, hasSize(1));
@@ -249,7 +249,7 @@ public class AnimalServiceTests {
         mocked.when(ObjectId::get).thenReturn(id);
 
         Animal mockedAnimal = new Animal();
-        mockedAnimal.setId(id);
+        mockedAnimal.setId(String.valueOf(id));
         mockedAnimal.setName("Test");
         mockedAnimal.setType("test");
         mockedAnimal.setSex("test");
@@ -272,9 +272,9 @@ public class AnimalServiceTests {
                         "\t\t<cost>test</cost>\n" +
                         "\t</animal>\n" +
                         "</animals>").getBytes()));
-        Mockito.when(repository.createFromFile(mockedAnimals)).thenReturn(mockedAnimals);
+        Mockito.when(repository.post(mockedAnimals)).thenReturn(mockedAnimals);
         //Act
-        Executable executable = () -> service.createFromFile(mockedFile);
+        Executable executable = () -> service.post(mockedFile);
         mocked.close();
         //Assert
         Assertions.assertThrows(IncorrectFileDataException.class,
@@ -288,7 +288,7 @@ public class AnimalServiceTests {
         MultipartFile mockedFile = Mockito.mock(MultipartFile.class);
         Mockito.when(mockedFile.getContentType()).thenReturn("text/test");
         //Act
-        Executable executable = () -> service.createFromFile(mockedFile);
+        Executable executable = () -> service.post(mockedFile);
         //Assert
         Assertions.assertThrows(IncorrectFileContentTypeException.class,
                 executable);

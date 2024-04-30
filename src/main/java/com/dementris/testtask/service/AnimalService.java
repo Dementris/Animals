@@ -8,16 +8,16 @@ import com.dementris.testtask.model.AnimalRepository;
 import com.dementris.testtask.model.AnimalsOrchestrator;
 import com.dementris.testtask.service.dto.AnimalsParamsDto;
 import com.dementris.testtask.service.parser.AnimalParser;
-import com.dementris.testtask.service.parser.AnimalParserImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * AnimalService implements AnimalOrchestrator.
+ */
 @Service
 public class AnimalService implements AnimalsOrchestrator {
     private final AnimalParser parser;
@@ -29,17 +29,32 @@ public class AnimalService implements AnimalsOrchestrator {
     }
 
 
+    /**
+     * Method get() retrieves animals from repository and checks if they are empty.
+     * Returns list af animals
+     *
+     * @param params Dto.
+     * @return List<Animals> animals.
+     * @throws AnimalNotFoundException animals not found
+     */
     @Override
-    public List<Animal> getAll(AnimalsParamsDto params) {
-        List<Animal> animals = animalRepository.getAll(params.type(), params.category(), params.sex(), params.orderBy());
+    public List<Animal> get(AnimalsParamsDto params) {
+        List<Animal> animals = animalRepository.get(params.type(), params.category(), params.sex(), params.orderBy());
         if (animals.isEmpty()){
             throw new AnimalNotFoundException();
         }
         return animals;
     }
 
+    /**
+     * Method post() checks the file and retrieve animals from repository and checks on incorrect file data.
+     * Returns list of created animals.
+     *
+     * @param file File with content type text/csv or text/xml.
+     * @return List<Animal> animals
+     */
     @Override
-    public List<Animal> createFromFile(MultipartFile file){
+    public List<Animal> post(MultipartFile file){
         List<Animal> animals;
         if (Objects.equals(file.getContentType(), "text/csv")){
             try {
@@ -56,7 +71,7 @@ public class AnimalService implements AnimalsOrchestrator {
         }else {
             throw new IncorrectFileContentTypeException();
         }
-        animals = animalRepository.createFromFile(animals);
+        animals = animalRepository.post(animals);
         return animals;
     }
 }

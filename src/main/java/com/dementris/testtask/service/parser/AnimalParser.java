@@ -6,9 +6,12 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * AnimalParser interface has a parseCsv() and parseXml() methods implemented in AnimalParserImpl
+ */
 public interface AnimalParser {
 
-    List<Animal> parseCsv(Resource data) throws IOException;
-    List<Animal> parseXml(Resource data) throws IOException;
+    List<Animal> parseCsv(Resource data);
+    List<Animal> parseXml(Resource data);
 
 }
