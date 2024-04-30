@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import static java.util.Collections.singletonList;
 
 @Configuration
-public class MongoAppConfig extends AbstractMongoClientConfiguration {
+public class MongoDbAppConfig extends AbstractMongoClientConfiguration {
 
   @Override
   public String getDatabaseName() {

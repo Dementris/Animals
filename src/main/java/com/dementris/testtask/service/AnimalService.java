@@ -1,5 +1,8 @@
 package com.dementris.testtask.service;
 
+import com.dementris.testtask.exceptions.AnimalNotFoundException;
+import com.dementris.testtask.exceptions.IncorrectFileContentTypeException;
+import com.dementris.testtask.exceptions.IncorrectFileDataException;
 import com.dementris.testtask.model.Animal;
 import com.dementris.testtask.model.AnimalRepository;
 import com.dementris.testtask.model.AnimalsOrchestrator;
@@ -28,29 +31,32 @@ public class AnimalService implements AnimalsOrchestrator {
 
     @Override
     public List<Animal> getAll(AnimalsParamsDto params) {
-
-        return animalRepository.getAll(params.type(), params.category(), params.sex(), params.orderBy());
+        List<Animal> animals = animalRepository.getAll(params.type(), params.category(), params.sex(), params.orderBy());
+        if (animals.isEmpty()){
+            throw new AnimalNotFoundException();
+        }
+        return animals;
     }
 
     @Override
     public List<Animal> createFromFile(MultipartFile file){
-        List<Animal> animals = new ArrayList<>();
+        List<Animal> animals;
         if (Objects.equals(file.getContentType(), "text/csv")){
             try {
                 animals = parser.parseCsv(file.getResource());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new IncorrectFileDataException();
             }
         }else if (Objects.equals(file.getContentType(), "text/xml")){
             try {
                 animals = parser.parseXml(file.getResource());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new IncorrectFileDataException();
             }
         }else {
-            throw new RuntimeException();
+            throw new IncorrectFileContentTypeException();
         }
-
-        return animalRepository.createFromFile(animals);
+        animals = animalRepository.createFromFile(animals);
+        return animals;
     }
 }

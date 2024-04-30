@@ -1,5 +1,6 @@
 package com.dementris.testtask.service.parser;
 
+import com.dementris.testtask.exceptions.IncorrectFileDataException;
 import com.dementris.testtask.service.dto.CsvAnimalDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Service
 public class AnimalValidator {
 
-    public <T> List<T> validate(Iterator<T> it){
+    public <T> List<T> validate(Iterator<T> it) throws IncorrectFileDataException {
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         List<T> entities = new ArrayList<>();
         while (it.hasNext()){

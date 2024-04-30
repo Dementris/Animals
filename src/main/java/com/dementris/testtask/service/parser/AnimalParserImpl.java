@@ -9,22 +9,18 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
-@Service
+
+@Component
 public class AnimalParserImpl implements AnimalParser {
 
     private final AnimalValidator validator;
@@ -37,7 +33,8 @@ public class AnimalParserImpl implements AnimalParser {
 
 
     @Override
-    public List<Animal> parseCsv(Resource data) throws IOException {
+    @SneakyThrows
+    public List<Animal> parseCsv(Resource data) {
         CsvMapper csvMapper = new CsvMapper();
         CsvSchema schema = csvMapper.schemaFor(CsvAnimalDto.class).withHeader();
         MappingIterator<CsvAnimalDto> it = csvMapper.readerFor(CsvAnimalDto.class).with(schema).readValues(data.getContentAsByteArray());
@@ -45,7 +42,8 @@ public class AnimalParserImpl implements AnimalParser {
     }
 
     @Override
-    public List<Animal> parseXml(Resource data) throws IOException {
+    @SneakyThrows
+    public List<Animal> parseXml(Resource data){
         XmlMapper xmlMapper = new XmlMapper();
         XmlAnimalsDto entities = xmlMapper.readValue(data.getContentAsByteArray(), XmlAnimalsDto.class);
         Iterator<XmlAnimalDto> it = entities.animal().stream().iterator();
