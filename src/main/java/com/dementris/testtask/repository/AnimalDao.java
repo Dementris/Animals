@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 public class AnimalDao {
     @Id
     @NotEmpty
-    private ObjectId id;
+    private String id;
     @NotEmpty
     @Size(min=2, max = 256)
     private String name;
