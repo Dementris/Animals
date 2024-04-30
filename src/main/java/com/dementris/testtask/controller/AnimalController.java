@@ -32,7 +32,7 @@ public class AnimalController {
             @RequestParam String type,
             @RequestParam Integer category,
             @RequestParam String sex,
-            @RequestParam String orderBy
+            @RequestParam(value = "id") String orderBy
             ){
         AnimalsParamsDto paramsDto = new AnimalsParamsDto(
                 type,
